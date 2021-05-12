@@ -1,5 +1,4 @@
 import Web3 from "web3";
-require("dotenv").config({ path: "../.env" });
 const rinkebyHttps = process.env.RINKEBY_HTTPS;
 
 let web3;
