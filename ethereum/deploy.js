@@ -1,6 +1,7 @@
 const HDWalletProvider = require("truffle-hdwallet-provider");
 const Web3 = require("web3");
 const compiledFactory = require("./build/CampaignFactory.json");
+require('dotenv').config()
 
 const mnemonic = process.env.MNEMONIC;
 const rinkebyHttps = process.env.RINKEBY_HTTPS;
