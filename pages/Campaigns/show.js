@@ -1,13 +1,69 @@
-import React, { Component } from 'react'
-import Layout from '../../components/Layout'
+import React, { Component } from "react";
+import { Card } from "semantic-ui-react";
+import Layout from "../../components/Layout";
+import Campaign from "../../ethereum/campaign";
+import web3 from "../../ethereum/web3";
 
- class CampaignShow extends Component {
-    render() {
-        return (
-            <Layout>
-                <h3> Camp </h3>
-            </Layout>
-        )
-    }
+class CampaignShow extends Component {
+  static async getInitialProps(props) {
+    const campaign = Campaign(props.query.address);
+    const summary = await campaign.methods.getSummary().call();
+    return {
+        minimumContribution: summary[0],
+        balance: summary[1],
+        requestsCount: summary[2],
+        approversCount: summary[3],
+        manager: summary[4]
+    };
+  }
+
+  renderCards(){
+      const {
+          balance,
+          manager,
+          minimumContribution,
+          requestsCount,
+          approversCount
+      } = this.props;
+      const items = [
+          {
+              header: manager,
+              meta: 'Address of Manager',
+              description: 'The manager created this campaign and can create requests to withdraw money.',
+              style: {overflowWrap: 'break-word'}
+          },
+          {
+              header: minimumContribution,
+              meta: 'Minimum Contribution (wei)',
+              description: 'You must contribute at least this much wei to become an approver'
+          },
+          {
+              header: requestsCount,
+              meta: 'Number of Requests',
+              description: 'A request tries to withdraw money from the campaign contract. Requests must be approved by 50% of contributers before being fulfilled.'
+          },
+          {
+              header: approversCount,
+              meta: 'Number of Approvers',
+              description: 'Number of people who have already donated to the campaign fund.'
+          },
+          {
+            header: web3.utils.fromWei(balance, 'ether'),
+            meta: 'Campaign Balance ($ETH)',
+            description: 'The balance is how much money this campaign has left to spend.' 
+          }
+      ]
+
+      return <Card.Group items={items}></Card.Group>
+  }
+
+  render() {
+    return (
+      <Layout>
+        <h3>Campaign Show</h3>
+        {this.renderCards()}
+      </Layout>
+    );
+  }
 }
-export default CampaignShow
+export default CampaignShow;
