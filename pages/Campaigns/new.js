@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import Layout from "../../components/Layout";
-import { Form, Button, Message } from "semantic-ui-react";
+import { Form, Button, Message, Input } from "semantic-ui-react";
 import factory from "../../ethereum/factory";
 import web3 from "../../ethereum/web3";
 import { Router } from "../../routes";
+
 class CampaignNew extends Component {
   state = {
     minimumContribution: "",
@@ -34,8 +35,8 @@ class CampaignNew extends Component {
         <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
           <Form.Field>
             <label>Min Contribution</label>
-            <input
-              placeholder="wei"
+            <Input
+              label="$wei" labelPosition="right"
               value={this.state.minimumContribution}
               onChange={(e) =>
                 this.setState({ minimumContribution: e.target.value })
